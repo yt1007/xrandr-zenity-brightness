@@ -25,8 +25,12 @@ then
 fi;
 
 ## Draw a Zenity Window to Adjust Brightness
+set -o pipefail
 /usr/bin/zenity --scale \
-	--text="Brightness" \
+	--title="Brightness" \
+	--ok-label="Done" \
+	--cancel-label="Revert" \
+	--text="" \
 	--value=${CurrentBrightness} \
 	--min-value=0 \
 	--max-value=100 \
@@ -38,5 +42,15 @@ fi;
 			--brightness ${BrightValue}
 	done
 
+## If user cancels, revert to original Brightness
+ExitCode=$?
+if [[ ${ExitCode} -eq 1 ]];
+then
+	BrightValue=$(echo "${CurrentBrightness} * 0.01" | /usr/bin/bc)
+	/usr/bin/xrandr --output ${PrimaryScreen} \
+		--brightness ${BrightValue}
+	exit $?
+fi
+
 ## Quit
-exit $?
+exit ${ExitCode}
