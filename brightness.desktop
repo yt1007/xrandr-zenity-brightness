@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Brightness
+Comment=Set Screen Brightness
+Exec=/opt/brightness/brightness.sh
+Icon=/opt/brightness/brightness.ico
+Terminal=false
+Type=Application
+Categories=Settings;
+X-Desktop-File-Install-Version=0.26
