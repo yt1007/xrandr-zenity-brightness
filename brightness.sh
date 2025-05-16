@@ -25,6 +25,7 @@ then
 fi;
 
 ## Draw a Zenity Window to Adjust Brightness
+## Prevents Brightness from being set below 15%
 set -o pipefail
 /usr/bin/zenity --scale \
 	--title="Brightness" \
@@ -37,6 +38,10 @@ set -o pipefail
 	--print-partial | \
 	while read BrightPercent;
 	do
+		if [[ ${BrightPercent} -lt 15 ]];
+		then
+			BrightPercent=15;
+		fi;
 		BrightValue=$(echo "${BrightPercent} * 0.01" | /usr/bin/bc)
 		/usr/bin/xrandr --output ${PrimaryScreen} \
 			--brightness ${BrightValue}
